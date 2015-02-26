@@ -11,6 +11,9 @@ Partial Class _Default
         Dim term As Integer
         Dim loanTerm As Integer
         Dim monthlyPayment As Double
+        Dim nDate As Date
+
+
 
         'This section is declaring the variables for loan amortization.
         Dim interestPaid As Double
@@ -22,13 +25,31 @@ Partial Class _Default
         Dim loanAmortTbl As DataTable = New DataTable("AmortizationTable")
         Dim tRow As DataRow
 
+      
+
         'This section adds default values to the variables.  
         interestPaid = 0.0
 
         'This section converts each input string to the appropriate variable assigned.
-        loanAmount = CDbl(tbLoanAmt.Text)
-        annualRate = CDbl(tbAnnualInterest.Text)
-        term = CDbl(tbLoanTerm.Text)
+        loanAmount = Val(tbLoanAmt.Text)
+        annualRate = Val(tbAnnualInterest.Text)
+        term = Val(tbLoanTerm.Text)
+
+
+
+        'Error messages on required fields
+        If tbLoanAmt.Text = String.Empty Then
+            lbl_LoanError.Text = "Please Enter a Loan Amount"
+            Exit Sub
+        
+        End If
+        If tbAnnualInterest.Text = String.Empty Then
+            lbl_InterestError.Text = "Please Enter a Valid Interest Amount"
+        End If
+        If tbLoanTerm.Text = String.Empty Then
+            lbl_TermError.Text = "Please Enter a Valid Loan Term in Years"
+        End If
+
 
         'This section formats the loan input to currency.
         tbLoanAmt.Text = FormatCurrency(loanAmount)
@@ -48,8 +69,10 @@ Partial Class _Default
 
         'Adds items to list box, formats them for currency and adds pad spacing for each item.
         loanAmortTbl.Columns.Add("Payment Number", System.Type.GetType("System.String"))
+        loanAmortTbl.Columns.Add("Payment Date", System.Type.GetType("System.String"))
         loanAmortTbl.Columns.Add("Principal Paid", System.Type.GetType("System.String"))
         loanAmortTbl.Columns.Add("Interest Paid", System.Type.GetType("System.String"))
+        loanAmortTbl.Columns.Add("New Balance", System.Type.GetType("System.String"))
 
 
         'This section uses the for loop to display the loan balance and interest paid over the term of the loan.
@@ -62,12 +85,16 @@ Partial Class _Default
             principal = monthlyPayment - interestPaid
             nBalance = loanAmount - principal
             loanAmount = nBalance
+            nDate = Date.Now
+            nDate = DateAdd(DateInterval.Month, counterStart, nDate)
 
             'Writes the data to a new row in the gridview.
             tRow = loanAmortTbl.NewRow()
             tRow("Payment Number") = String.Format(counterStart)
+            tRow("Payment Date") = Format(nDate, "MMM,dd,yyyy")
             tRow("Principal Paid") = String.Format("{0:C}", principal) ' String.Format("{0:C},principal) formats the variable "prinicpal" as currency (C).
             tRow("Interest Paid") = String.Format("{0:C}", interestPaid)
+            tRow("New Balance") = String.Format("{0:C}", nBalance)
             loanAmortTbl.Rows.Add(tRow)
 
             'Loops to next counterStart (Continues loop until counterStart requirements are met (loanTerm)).
@@ -80,4 +107,13 @@ Partial Class _Default
 
     End Sub
 
+    Protected Sub BTN_clear_Click(sender As Object, e As EventArgs) Handles BTN_clear.Click
+        tbAnnualInterest.Text = String.Empty
+        tbLoanAmt.Text = String.Empty
+        tbLoanTerm.Text = String.Empty
+        lblMonthlyPmt.Text = String.Empty
+        loanGridView.Columns.Clear()
+        lblMonthlyPmt.Text = String.Empty
+
+    End Sub
 End Class
