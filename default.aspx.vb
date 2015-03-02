@@ -44,7 +44,12 @@ Partial Class _Default
         
         End If
         If tbAnnualInterest.Text = String.Empty Then
-            lbl_InterestError.Text = "Please Enter a Valid Interest Amount"
+            lbl_InterestError.Text = "Please Enter a Valid Interest Amount 05 = 5%"
+        ElseIf Not Regex.IsMatch(tbAnnualInterest.Text, "^[0-9][0-9]$") Then
+
+            lbl_InterestError.Text = " ** It appears you did not enter a valid Interest Rate 05 = 5%. ** "
+
+            Exit Sub
         End If
         If tbLoanTerm.Text = String.Empty Then
             lbl_TermError.Text = "Please Enter a Valid Loan Term in Years"
@@ -114,6 +119,7 @@ Partial Class _Default
         lblMonthlyPmt.Text = String.Empty
         loanGridView.Columns.Clear()
         lblMonthlyPmt.Text = String.Empty
-
+        loanGridView.DataSource = Nothing
+        loanGridView.DataBind()
     End Sub
 End Class

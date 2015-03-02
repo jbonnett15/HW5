@@ -12,7 +12,7 @@
     <form id="form1" runat="server">
     <div>
     
-    Mike's Mortgage Calculator
+    John's Mortgage Calculator
         
         <br /><br />
      
@@ -49,12 +49,13 @@
         <!-- Then this page is in postback to show the monthly payment and payment schedule.-->
         <br />
                 
-        Monthly Payment: &nbsp; <span class-"bold"><asp:Label ID="lblMonthlyPmt" runat="server"></asp:Label></span>
+        Monthly Payment: &nbsp; <span class="bold"><asp:Label ID="lblMonthlyPmt" runat="server"></asp:Label></span>
         
         <br />
         <br />
         
-        <asp:GridView ID="loanGridView" runat="server" CSSClass="cssgridview">
+        <asp:GridView ID="loanGridView" runat="server" CSSClass="cssgridview" Font-Bold="True" ForeColor="Black">
+
             <AlternatingRowStyle CssClass="alt"/>    
             </asp:GridView>
         <% End IF %>
